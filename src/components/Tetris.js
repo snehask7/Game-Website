@@ -23,7 +23,7 @@ const Tetris = () => {
   const [stage, setStage, rowsCleared] = useStage(player, resetPlayer);
   const [score, setScore, rows, setRows, level, setLevel] = useGameStatus(rowsCleared)
   const [paused, setPaused] = useState(0);
-  const[gameStarted,setGameStarted]=useState(0);
+  const [gameStarted, setGameStarted] = useState(0);
 
   const movePlayer = dir => {
     if (!checkCollision(player, stage, { x: dir, y: 0 })) {
@@ -117,7 +117,11 @@ const Tetris = () => {
         <Stage stage={stage} />
         <aside>
           {gameOver ? (
-            <Display gameOver={gameOver} text="Game Over" />
+            <div>
+              <Display gameOver={gameOver} text="Game Over" />
+              <Display text={`Score: ${score}`} />
+            </div>
+
           ) : (
               <div>
                 <Display text={`Score: ${score}`} />
@@ -125,7 +129,7 @@ const Tetris = () => {
                 <Display text={`Level: ${level}`} />
               </div>
             )}
-          <StartButton text={gameStarted===0 ? 'Start Game' : 'Restart Game'} callback={startGame} />
+          <StartButton text={gameStarted === 0 ? 'Start Game' : 'Restart Game'} callback={startGame} />
           <StartButton text={paused === 0 ? 'Pause' : 'Continue'} callback={pauseGame} />
 
         </aside>
