@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
+import Nav from '../Nav'
 import { createStage, checkCollision } from '../gameHelper';
 
 // Styled Components
@@ -13,9 +14,15 @@ import { useGameStatus } from '../hooks/useGameStatus'
 // Components
 import Stage from './Stage';
 import Display from './Display';
+import HighScoreDisplay from './HighScoreDisplay';
+
+import firebase from '../base'
+import 'firebase/firestore';
+
 import StartButton from './StartButton';
 
 const Tetris = () => {
+
   const [dropTime, setDropTime] = useState(null);
   const [gameOver, setGameOver] = useState(false);
 
@@ -24,6 +31,31 @@ const Tetris = () => {
   const [score, setScore, rows, setRows, level, setLevel] = useGameStatus(rowsCleared)
   const [paused, setPaused] = useState(0);
   const [gameStarted, setGameStarted] = useState(0);
+  const [highScore, setHighScore] = useState(0)
+  useEffect(() => {
+    if (score > highScore)
+      setHighScore(score)
+  }, [score],
+  );
+
+  useEffect(() => {
+    var high = 0;
+    var user = firebase.auth().currentUser;
+    const db = firebase.firestore();
+    db.collection("Users")
+      .doc(user.uid)
+      .get()
+      .then(doc => {
+        if (doc.tetrisScore) {
+          high = doc.data().tetrisScore;
+          console.log(doc.data())
+          setHighScore(high)
+        }
+
+        // console.log(data); // LA city object with key-value pair
+      })
+  }, [],
+  );
 
   const movePlayer = dir => {
     if (!checkCollision(player, stage, { x: dir, y: 0 })) {
@@ -67,8 +99,20 @@ const Tetris = () => {
     else {
       // Game Over
       if (player.pos.y < 1) {
+        var user = firebase.auth().currentUser;
         console.log("GAME OVER!!!");
         setGameOver(true);
+        const db = firebase.firestore();
+        db.collection("Users").doc(user.uid).set({
+          userID: user.uid,
+          tetrisScore: highScore,
+        })
+          .then(function () {
+            console.log("Document successfully written!");
+          })
+          .catch(function (error) {
+            console.error("Error writing document: ", error);
+          });
         setDropTime(null);
       }
       updatePlayerPos({ x: 0, y: 0, collided: true });//setting position back to the top
@@ -107,34 +151,43 @@ const Tetris = () => {
   }
 
   return (
-    <StyledTetrisWrapper
-      role="button"
-      tabIndex="0"
-      onKeyDown={e => move(e)}
-      onKeyUp={keyUp}
-    >
-      <StyledTetris>
-        <Stage stage={stage} />
-        <aside>
-          {gameOver ? (
-            <div>
-              <Display gameOver={gameOver} text="Game Over" />
-              <Display text={`Score: ${score}`} />
-            </div>
+    <>
+      <Nav />
 
-          ) : (
+      <StyledTetrisWrapper
+        role="button"
+        tabIndex="0"
+        onKeyDown={e => move(e)}
+        onKeyUp={keyUp}
+      >
+        <br></br>
+        <div style={{ marginBottom: '-4em', width: '10em`' }}>
+          <HighScoreDisplay text={`High Score: ${highScore}`} />
+        </div>
+        <StyledTetris>
+
+          <Stage stage={stage} />
+          <aside>
+            {gameOver ? (
               <div>
+                <Display gameOver={gameOver} text="Game Over" />
                 <Display text={`Score: ${score}`} />
-                <Display text={`rows: ${rows}`} />
-                <Display text={`Level: ${level}`} />
               </div>
-            )}
-          <StartButton text={gameStarted === 0 ? 'Start Game' : 'Restart Game'} callback={startGame} />
-          <StartButton text={paused === 0 ? 'Pause' : 'Continue'} callback={pauseGame} />
 
-        </aside>
-      </StyledTetris>
-    </StyledTetrisWrapper>
+            ) : (
+                <div>
+                  <Display text={`Score: ${score}`} />
+                  <Display text={`rows: ${rows}`} />
+                  <Display text={`Level: ${level}`} />
+                </div>
+              )}
+            <StartButton text={gameStarted === 0 ? 'Start Game' : 'Restart Game'} callback={startGame} />
+            <StartButton text={paused === 0 ? 'Pause' : 'Continue'} callback={pauseGame} />
+
+          </aside>
+        </StyledTetris>
+      </StyledTetrisWrapper>
+    </>
   );
 };
 

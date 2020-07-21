@@ -15,7 +15,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useHistory } from 'react-router'
-
+import firebase from './base'
 const SignUp = ({ history }) => {
 
   const { push } = useHistory()
@@ -23,16 +23,25 @@ const SignUp = ({ history }) => {
 
   const handleSignUp = useCallback(async event => {
     event.preventDefault();
-    const { email, password } = event.target.elements;
-    try {
-      await app
-        .auth()
-        .createUserWithEmailAndPassword(email.value, password.value);
-      history.push("/");
-    } catch (error) {
-      alert(error);
-    }
-  }, [history]);
+    const { name, email, password } = event.target.elements;
+    firebase.auth()
+      .createUserWithEmailAndPassword(email.value, password.value)
+      .then((res) => {
+        const user = firebase.auth().currentUser;
+        return user.updateProfile({
+          displayName: name.value
+        })
+      })
+      .then((res) => {
+        alert('User added')
+        push('/login')
+
+      })
+      .catch(function (error) {
+        alert(error);
+      });
+
+  })
 
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -71,7 +80,7 @@ const SignUp = ({ history }) => {
             Sign Up
         </Typography>
           <form onSubmit={handleSignUp} className={classes.form} noValidate>
-          <TextField
+            <TextField
               variant="outlined"
               margin="normal"
               required
@@ -118,7 +127,7 @@ const SignUp = ({ history }) => {
             <Grid container>
 
               <Grid item>
-                <Link onClick={() => push('/login')} variant="body2">
+                <Link href='#' onClick={() => push('/login')} variant="body2">
                   {"Have an account? Sign In"}
                 </Link>
               </Grid>

@@ -18,8 +18,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useHistory } from 'react-router'
 
+
 const Login = ({ history }) => {
+
   const { push } = useHistory()
+
 
   const handleLogin = useCallback(
     async event => {
@@ -36,8 +39,6 @@ const Login = ({ history }) => {
     },
     [history]
   );
-
-  const { currentUser } = useContext(AuthContext);
 
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -61,30 +62,12 @@ const Login = ({ history }) => {
 
   const classes = useStyles();
 
-  if (currentUser) {
-    return <Redirect to="/" />;
-  }
-
   return (
-    <>
-      
-      {/* <div className="Login center container " >
-        <h1>Log in</h1>
-        <Form onSubmit={handleLogin}>
-          <Form.Group>
-            <Form.Label><b>&nbsp;Email</b></Form.Label>
-            <input name="email" type="email" placeholder="Email" />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label><b>&nbsp;
-            Password
-</b></Form.Label>
-            <input name="password" type="password" placeholder="Password" />
-          </Form.Group>
-          <Button type="submit">Log in</Button>
-        </Form>
-      </div> */}
-      <Container component="main" maxWidth="xs">
+
+
+    <div>
+
+<Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -134,9 +117,9 @@ const Login = ({ history }) => {
               </Link>
             </Grid>
             <Grid item>
-              <Link onClick={() => push('/signup')} variant="body2">
+              <a href='#'onClick={() => push('/signup')} variant="body2">
                 {"Don't have an account? Sign Up"}
-              </Link>
+              </a>
             </Grid>
           </Grid>
         </form>
@@ -145,7 +128,7 @@ const Login = ({ history }) => {
        
       </Box>
     </Container>
-    </>
+    </div>
   );
 };
 
