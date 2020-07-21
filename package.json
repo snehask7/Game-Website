@@ -15,7 +15,6 @@
     "react-scripts": "3.0.1",
     "styled-components": "^4.3.2"
   },
-  "homepage": "http://snehasriram.site/Game-Website/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

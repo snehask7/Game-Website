@@ -13,7 +13,7 @@ import Tetris from './components/Tetris';
 const App = () => {
   return (
     <AuthProvider>
-      <Router basename="http://snehasriram.site/Game-Site/">
+      <Router >
         <div>
           <PrivateRoute exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
