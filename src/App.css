@@ -18,6 +18,23 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
+.Login {
+  background-color:  #20bf55;
+  background-image:  linear-gradient(315deg, #20bf55 0%, #01baef 74%);
+  margin-top:140px ;
+  justify-content: center;
+padding: 60px 0;
+width: 28em;
+color: white;
+}
+
+.Login form {
+
+margin: 0 auto;
+max-width: 320px;
+color: white;
+
+}
 
 .App-link {
   color: #61dafb;
