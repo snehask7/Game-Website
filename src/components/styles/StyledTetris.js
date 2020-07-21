@@ -5,8 +5,6 @@ import bgImage from '../../img/bg.png';
 export const StyledTetrisWrapper = styled.div`
   width: 100vw;
   height: 100vh;
-  background-color: #000000;
-  background-image: linear-gradient(147deg, #000000 0%, #04619f 74%);
   overflow: hidden;
 `;
 

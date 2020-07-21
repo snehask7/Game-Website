@@ -18,8 +18,6 @@ export const MenuWrapper = styled.div`
 display:flex;
 justify-content: center;
 align-items: center;
-background-color: #000000;
-background-image: linear-gradient(147deg, #000000 0%, #04619f 74%);
 width: 100vw;
 height: 100vh;
 `;
