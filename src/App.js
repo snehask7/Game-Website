@@ -1,11 +1,29 @@
-import React from 'react';
+import React from "react";
+import "./App.css";
+import { HashRouter as Router, Route } from "react-router-dom";
+import Home from "./Home";
+import Login from "./Login";
+import SignUp from "./SignUp";
+import { AuthProvider } from "./Auth";
+import PrivateRoute from "./PrivateRoute";
 import Tetris from './components/Tetris';
-import Menu from './components/Menu';
 
-const App = () => (
-  <div className="App">
-    <Menu />
-  </div>
-);
+
+
+const App = () => {
+  return (
+    <AuthProvider>
+      <Router basename="http://snehasriram.site/Game-Site/">
+        <div>
+          <PrivateRoute exact path="/" component={Home} />
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/signup" component={SignUp} />
+          <Route path="/Tetris" exact component={Tetris} />
+
+        </div>
+      </Router>
+    </AuthProvider>
+  );
+};
 
 export default App;
