@@ -24,6 +24,18 @@ const Login = ({ history }) => {
   const { push } = useHistory()
 
 
+  const guestLogin = () => {
+    const email = 'guest@gmail.com';
+    const password = 'guest123';
+    try {
+      app
+        .auth()
+        .signInWithEmailAndPassword(email, password);
+      history.push("/");
+    } catch (error) {
+      alert(error);
+    }
+  }
   const handleLogin = useCallback(
     async event => {
       event.preventDefault();
@@ -67,67 +79,77 @@ const Login = ({ history }) => {
 
     <div>
 
-<Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign in
         </Typography>
-        <form onSubmit={handleLogin} className={classes.form} noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            type="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-          />
+          <form onSubmit={handleLogin} className={classes.form} noValidate>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              type="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+            />
 
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign In
+            <Button
+              fullWidth
+              type="submit"
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Sign In
           </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={guestLogin}
+
+            >
+              Play as guest
+          </Button>
+            <Grid container>
+              <Grid item xs>
+                <Link href="#" variant="body2">
+                  Forgot password?
               </Link>
+              </Grid>
+              <Grid item>
+                <a href='#' onClick={() => push('/signup')} variant="body2">
+                  {"Don't have an account? Sign Up"}
+                </a>
+              </Grid>
             </Grid>
-            <Grid item>
-              <a href='#'onClick={() => push('/signup')} variant="body2">
-                {"Don't have an account? Sign Up"}
-              </a>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
-      <Box mt={8}>
-       
-      </Box>
-    </Container>
+          </form>
+        </div>
+        <Box mt={8}>
+
+        </Box>
+      </Container>
     </div>
   );
 };

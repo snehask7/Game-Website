@@ -25,7 +25,8 @@ const Tetris = () => {
 
   const [dropTime, setDropTime] = useState(null);
   const [gameOver, setGameOver] = useState(false);
-
+  const user = firebase.auth().currentUser;
+  console.log(user.email)
   const [player, updatePlayerPos, resetPlayer, playerRotate] = usePlayer();
   const [stage, setStage, rowsCleared] = useStage(player, resetPlayer);
   const [score, setScore, rows, setRows, level, setLevel] = useGameStatus(rowsCleared)
@@ -40,15 +41,13 @@ const Tetris = () => {
 
   useEffect(() => {
     var high = 0;
-    var user = firebase.auth().currentUser;
     const db = firebase.firestore();
     db.collection("Users")
       .doc(user.uid)
       .get()
       .then(doc => {
-        if (doc.tetrisScore) {
+        if (doc.data() && doc.data().tetrisScore) {
           high = doc.data().tetrisScore;
-          console.log(doc.data())
           setHighScore(high)
         }
 
@@ -82,7 +81,7 @@ const Tetris = () => {
     setGameOver(false);
     setScore(0)
     setRows(0)
-    setLevel(0)
+    setLevel(1)
   }
 
   const drop = () => {
@@ -161,32 +160,43 @@ const Tetris = () => {
         onKeyUp={keyUp}
       >
         <br></br>
-        <div style={{ marginBottom: '-4em', width: '10em`' }}>
-          <HighScoreDisplay text={`High Score: ${highScore}`} />
-        </div>
-        <StyledTetris>
+        {
+          user.email !== 'guest@gmail.com' ?
 
-          <Stage stage={stage} />
-          <aside>
-            {gameOver ? (
+            <div style={{ marginBottom: '-4em', width: '10em`' }}>
+              <HighScoreDisplay text={`High Score: ${highScore}`} />
+            </div>
+
+            :
+         
+           <>
+           </>
+
+        }
+
+      <StyledTetris>
+
+        <Stage stage={stage} />
+        <aside>
+          {gameOver ? (
+            <div>
+              <Display gameOver={gameOver} text="Game Over" />
+              <Display text={`Score: ${score}`} />
+            </div>
+
+          ) : (
               <div>
-                <Display gameOver={gameOver} text="Game Over" />
                 <Display text={`Score: ${score}`} />
+                <Display text={`rows: ${rows}`} />
+                <Display text={`Level: ${level}`} />
               </div>
+            )}
+          <StartButton text={gameStarted === 0 ? 'Start Game' : 'Restart Game'} callback={startGame} />
+          <StartButton text={paused === 0 ? 'Pause' : 'Continue'} callback={pauseGame} />
 
-            ) : (
-                <div>
-                  <Display text={`Score: ${score}`} />
-                  <Display text={`rows: ${rows}`} />
-                  <Display text={`Level: ${level}`} />
-                </div>
-              )}
-            <StartButton text={gameStarted === 0 ? 'Start Game' : 'Restart Game'} callback={startGame} />
-            <StartButton text={paused === 0 ? 'Pause' : 'Continue'} callback={pauseGame} />
-
-          </aside>
-        </StyledTetris>
-      </StyledTetrisWrapper>
+        </aside>
+      </StyledTetris>
+    </StyledTetrisWrapper>
     </>
   );
 };
