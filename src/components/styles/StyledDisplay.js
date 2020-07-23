@@ -20,7 +20,7 @@ export const StyledDisplay2 = styled.div`
   box-sizing: border-box;
   display: flex;
   align-items: center; 
-  margin: 0 0 20px 22em;
+  margin: 0 0 20px 28em;
   padding: 7px;
   padding-left: 25px;
   border: 4px solid #333;
@@ -30,5 +30,5 @@ export const StyledDisplay2 = styled.div`
   color: ${props => (props.gameOver ? 'red' : '#999')};
   background: #000;
   font-family: Pixel, Arial, Helvetica, sans-serif;
-  font-size: 30px;
+  font-size: 24px;
 `;

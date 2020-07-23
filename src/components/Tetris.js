@@ -198,6 +198,10 @@ const Tetris = () => {
   return (
     <>
       <Nav />
+      <br></br>
+      <br>
+     </br>
+     <br></br>
       {
         celebrate === 1 ?
           <Confetti
