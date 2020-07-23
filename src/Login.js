@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from "react";
+import React, { useCallback, useState, useContext } from "react";
 import { withRouter, Redirect } from "react-router";
 import app from "./base.js";
 import { AuthContext } from "./Auth.js";
@@ -17,11 +17,15 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useHistory } from 'react-router'
+import Modal from './Modal';
+
 
 
 const Login = ({ history }) => {
 
   const { push } = useHistory()
+
+  const [open, setOpen] = useState(false);
 
 
   const guestLogin = () => {
@@ -74,6 +78,15 @@ const Login = ({ history }) => {
 
   const classes = useStyles();
 
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+
   return (
 
 
@@ -85,6 +98,15 @@ const Login = ({ history }) => {
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="simple-modal-title"
+            aria-describedby="simple-modal-description"
+          >
+            <h1>Hello</h1>
+
+          </Modal>
           <Typography component="h1" variant="h5">
             Sign in
         </Typography>
@@ -132,11 +154,11 @@ const Login = ({ history }) => {
             >
               Play as guest
           </Button>
+
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-              </Link>
+
+              <Modal></Modal>
               </Grid>
               <Grid item>
                 <a href='#' onClick={() => push('/signup')} variant="body2">
