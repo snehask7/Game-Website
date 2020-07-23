@@ -1,9 +1,9 @@
 import React from 'react';
-import { StyledDisplayWhite } from './styles/StyledDisplay';
+import { StyledDisplay2 } from './styles/StyledDisplay';
 
 //displays the game over text
 const HighScoreDisplay = ({ gameOver, text }) => (
-  <StyledDisplayWhite gameOver={gameOver}>{text}</StyledDisplayWhite>
+  <StyledDisplay2 gameOver={gameOver}><p className="neon3">{text}</p></StyledDisplay2>
 )
 
 export default HighScoreDisplay;

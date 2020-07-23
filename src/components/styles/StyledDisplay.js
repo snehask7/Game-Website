@@ -16,19 +16,19 @@ export const StyledDisplay = styled.div`
   font-size: 1rem;
 `;
 
-export const StyledDisplayWhite = styled.div`
+export const StyledDisplay2 = styled.div`
   box-sizing: border-box;
   display: flex;
   align-items: center; 
-  margin: 0 0 20px 39em;
-  padding: 20px;
-  border: 2px solid #333;
-  min-height: 30px;
-  width: 13%;
+  margin: 0 0 20px 22em;
+  padding: 7px;
+  padding-left: 25px;
+  border: 4px solid #333;
+  min-height: 10px;
+  width: 20%;
   border-radius: 20px;
   color: ${props => (props.gameOver ? 'red' : '#999')};
-  background: #FFF;
+  background: #000;
   font-family: Pixel, Arial, Helvetica, sans-serif;
-  font-size: 1.2rem;
-  color: black
+  font-size: 30px;
 `;

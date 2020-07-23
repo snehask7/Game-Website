@@ -3,8 +3,12 @@ import React, { useState, useEffect } from 'react';
 import Nav from '../Nav'
 import { createStage, checkCollision } from '../gameHelper';
 
+import GameOver from '../gameover.png'
 // Styled Components
 import { StyledTetrisWrapper, StyledTetris } from './styles/StyledTetris';
+import Confetti from 'react-confetti'
+
+import Modal from 'simple-react-modal'
 
 // Custom Hooks
 import { usePlayer } from '../hooks/usePlayer';
@@ -26,18 +30,53 @@ const Tetris = () => {
   const [dropTime, setDropTime] = useState(null);
   const [gameOver, setGameOver] = useState(false);
   const user = firebase.auth().currentUser;
-  console.log(user.email)
   const [player, updatePlayerPos, resetPlayer, playerRotate] = usePlayer();
   const [stage, setStage, rowsCleared] = useStage(player, resetPlayer);
   const [score, setScore, rows, setRows, level, setLevel] = useGameStatus(rowsCleared)
   const [paused, setPaused] = useState(0);
   const [gameStarted, setGameStarted] = useState(0);
   const [highScore, setHighScore] = useState(0)
+  const [newScore, setNewScore] = useState(0)
+  const[HighScoreText,setHighScoreText]=useState('High Score: ')
+
+  const [celebrate, setCelebrate] = useState(0)
   useEffect(() => {
-    if (score > highScore)
+    if (score > highScore) {
+      setHighScoreText('New High Score: ')
       setHighScore(score)
+      setNewScore(1)
+    }
+
   }, [score],
   );
+
+  function useWindowSize() {
+    const isClient = typeof window === 'object';
+
+    function getSize() {
+      return {
+        width: isClient ? window.innerWidth : undefined,
+        height: isClient ? window.innerHeight : undefined
+      };
+    }
+
+    const [windowSize, setWindowSize] = useState(getSize);
+
+    useEffect(() => {
+      if (!isClient) {
+        return false;
+      }
+
+      function handleResize() {
+        setWindowSize(getSize());
+      }
+
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }, []); // Empty array ensures that effect is only run on mount and unmount
+
+    return windowSize;
+  }
 
   useEffect(() => {
     var high = 0;
@@ -73,6 +112,9 @@ const Tetris = () => {
     }
   }
   const startGame = () => {
+    setHighScoreText('High Score: ')
+    setCelebrate(0)
+    setNewScore(0)
     //resetting the game
     setGameStarted(1)
     setStage(createStage());
@@ -100,6 +142,8 @@ const Tetris = () => {
       if (player.pos.y < 1) {
         var user = firebase.auth().currentUser;
         console.log("GAME OVER!!!");
+        if (newScore)
+          setCelebrate(1)
         setGameOver(true);
         const db = firebase.firestore();
         db.collection("Users").doc(user.uid).set({
@@ -149,9 +193,20 @@ const Tetris = () => {
     }
   }
 
+  const { width, height } = useWindowSize()
+
   return (
     <>
       <Nav />
+      {
+        celebrate === 1 ?
+          <Confetti
+            width={width}
+            height={height}
+          />
+          :
+          null
+      }
 
       <StyledTetrisWrapper
         role="button"
@@ -164,39 +219,53 @@ const Tetris = () => {
           user.email !== 'guest@gmail.com' ?
 
             <div style={{ marginBottom: '-4em', width: '10em`' }}>
-              <HighScoreDisplay text={`High Score: ${highScore}`} />
+              <HighScoreDisplay text={`${HighScoreText} ${highScore}`} />
             </div>
-
             :
-         
-           <>
-           </>
+            <>
+            </>
 
         }
 
-      <StyledTetris>
+        <StyledTetris>
 
-        <Stage stage={stage} />
-        <aside>
-          {gameOver ? (
-            <div>
-              <Display gameOver={gameOver} text="Game Over" />
-              <Display text={`Score: ${score}`} />
-            </div>
-
-          ) : (
+          <Stage stage={stage} />
+          <aside>
+            {gameOver ? (
               <div>
                 <Display text={`Score: ${score}`} />
-                <Display text={`rows: ${rows}`} />
-                <Display text={`Level: ${level}`} />
               </div>
-            )}
-          <StartButton text={gameStarted === 0 ? 'Start Game' : 'Restart Game'} callback={startGame} />
-          <StartButton text={paused === 0 ? 'Pause' : 'Continue'} callback={pauseGame} />
 
-        </aside>
-      </StyledTetris>
-    </StyledTetrisWrapper>
+            ) : (
+                <div>
+                  <Display text={`Score: ${score}`} />
+                  <Display text={`rows: ${rows}`} />
+                  <Display text={`Level: ${level}`} />
+                </div>
+              )}
+            {
+              gameOver === true ?
+                <Modal
+                  className="test-class" //this will completely overwrite the default css completely
+                  // style={{ background: 'red' }} //overwrites the default background
+                  containerStyle={{ background: 'white', width: '15em', height: '7em', marginLeft: '-22em',marginTop: '10em', borderRadius: '5em' }} //changes styling on the inner content are
+                  containerClassName="test"
+                  closeOnOuterClick={true}
+                  show={true}
+                // onClose={this.close.bind(this)}
+                >
+                  <img style={{ marginTop: '1em', borderRadius: '5em' }} src={GameOver}></img>
+                </Modal>
+                :
+                null
+            }
+
+            <StartButton text={gameStarted === 0 ? 'Start Game' : 'Restart Game'} callback={startGame} />
+            <StartButton text={paused === 0 ? 'Pause' : 'Continue'} callback={pauseGame} />
+
+          </aside>
+        </StyledTetris>
+      </StyledTetrisWrapper>
     </>
   );
 };
