@@ -37,7 +37,7 @@ const Tetris = () => {
   const [gameStarted, setGameStarted] = useState(0);
   const [highScore, setHighScore] = useState(0)
   const [newScore, setNewScore] = useState(0)
-  const[HighScoreText,setHighScoreText]=useState('High Score: ')
+  const [HighScoreText, setHighScoreText] = useState('High Score: ')
 
   const [celebrate, setCelebrate] = useState(0)
   useEffect(() => {
@@ -200,8 +200,8 @@ const Tetris = () => {
       <Nav />
       <br></br>
       <br>
-     </br>
-     <br></br>
+      </br>
+      <br></br>
       {
         celebrate === 1 ?
           <Confetti
@@ -252,7 +252,7 @@ const Tetris = () => {
                 <Modal
                   className="test-class" //this will completely overwrite the default css completely
                   // style={{ background: 'red' }} //overwrites the default background
-                  containerStyle={{ background: 'white', width: '15em', height: '7em', marginLeft: '-22em',marginTop: '10em', borderRadius: '5em' }} //changes styling on the inner content are
+                  containerStyle={{ background: 'white', width: '18em', height: '7em', marginLeft: '-25em', borderRadius: '5em' }} //changes styling on the inner content are
                   containerClassName="test"
                   closeOnOuterClick={true}
                   show={true}
