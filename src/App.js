@@ -7,8 +7,7 @@ import SignUp from "./SignUp";
 import { AuthProvider } from "./Auth";
 import PrivateRoute from "./PrivateRoute";
 import Tetris from './components/Tetris';
-
-
+import Profile from './profile'
 
 const App = () => {
   return (
@@ -19,6 +18,7 @@ const App = () => {
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={SignUp} />
           <Route path="/Tetris" exact component={Tetris} />
+          <Route path="/profile" exact component={Profile}/>
 
         </div>
       </Router>

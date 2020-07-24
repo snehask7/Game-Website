@@ -12,19 +12,19 @@ import 'firebase/firestore';
 const Home = () => {
 
 
-  const readData = () => {
-    const db = firebase.firestore();
-    db.collection("Users").doc("new").set({
-      userID: "123",
-      tetrisScore: "123",
-    })
-      .then(function () {
-        console.log("Document successfully written!");
-      })
-      .catch(function (error) {
-        console.error("Error writing document: ", error);
-      });
-  }
+  // const readData = () => {
+  //   const db = firebase.firestore();
+  //   db.collection("Users").doc("new").set({
+  //     userID: "123",
+  //     tetrisScore: "123",
+  //   })
+  //     .then(function () {
+  //       console.log("Document successfully written!");
+  //     })
+  //     .catch(function (error) {
+  //       console.error("Error writing document: ", error);
+  //     });
+  // }
   return (
     <>
 

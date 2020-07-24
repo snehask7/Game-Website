@@ -22,6 +22,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { Icon } from 'react-icons-kit'
 import { thLarge } from 'react-icons-kit/fa/thLarge'
 import GroupIcon from '@material-ui/icons/Group';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 const drawerWidth = 240;
 
@@ -86,7 +87,7 @@ export default function ButtonAppBar() {
 
     var user = firebase.auth().currentUser;
     console.log(user)
-    var email = user.displayName;
+    var name = user.displayName;
 
 
     //     return (
@@ -144,10 +145,10 @@ export default function ButtonAppBar() {
 
                         <h3> Game Nation&nbsp;<SportsEsportsIcon fontSize="large" /></h3>
                     </Typography>
-                    <Typography style={{position: 'absolute', right: 170}} variant="h6" >
-                        <h3>Welcome {email} </h3>
+                    <Typography style={{ position: 'absolute', right: 170 }} variant="h6" >
+                        <h3>Welcome {name} </h3>
                     </Typography>
-                    <Typography style={{position: 'absolute', right: 10}}>
+                    <Typography style={{ position: 'absolute', right: 10 }}>
                         <Link to={`/login`} style={{ color: 'white', textDecoration: 'none' }}> <h3>Sign Out</h3></Link>
                     </Typography>
                 </Toolbar>
@@ -164,7 +165,7 @@ export default function ButtonAppBar() {
                 <div className={classes.drawerHeader}>
                     <Link to={`/`} style={{ textDecoration: 'none' }}> <h3 style={{ marginLeft: '1em' }}>Menu</h3></Link>
 
-                    <IconButton style={{ marginLeft: '5em' }} onClick={handleDrawerClose}>
+                    <IconButton style={{ marginLeft: '3em' }} onClick={handleDrawerClose}>
                         {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                     </IconButton>
                 </div>
@@ -180,14 +181,33 @@ export default function ButtonAppBar() {
                     </List>
                 </Link>
                 <Divider />
-                <List>
-                    <ListItem button >
-                        <GroupIcon />
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <ListItemText primary='Friends' />
-                    </ListItem>
 
-                </List>
+                {
+                    name === "Guest" ?
+                        null :
+                        <>
+                            <List>
+                                <ListItem button >
+                                    <GroupIcon />
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <ListItemText primary='Friends' />
+                                </ListItem>
+                            </List>
+                            <Link to={`/Profile`}>
+
+                                <List>
+                                    <ListItem button >
+                                        <AccountCircleIcon />
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <ListItemText primary='Your Profile' />
+                                    </ListItem>
+                                </List>
+                            </Link>
+                        </>
+
+                }
+
+
             </Drawer>
         </div>
     );
