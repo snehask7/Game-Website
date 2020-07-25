@@ -56,13 +56,13 @@ const Profile = () => {
     const [user, setUser] = useState()
     useEffect(() => {
         const user = firebase.auth().currentUser;
-        if (!user.photoURL)
-            setState({ ...state, email: user.email, name: user.displayName, avatar: defav })
-        else
-            setState({ ...state, email: user.email, name: user.displayName, avatar: user.photoURL })
-
-
-        console.log(user)
+        const db = firebase.firestore();
+        db.collection("Users")
+            .doc(user.uid)
+            .get()
+            .then(doc => {
+                setState({ ...state, name: doc.data().Name, avatar: doc.data().Avatar })
+            })
 
     }, [])
 
@@ -82,45 +82,60 @@ const Profile = () => {
     const classes = useStyles();
 
     const saveProfile = (event) => {
+
         console.log(newPwd)
         const user = firebase.auth().currentUser;
         event.preventDefault()
-        if (name === '' || email === '') {
+        if (name === '') {
             console.log('1')
-            alert('Name and Email are manditory fields!')
+            alert('Name is a manditory fields!')
         }
         if (newPwd !== confirmNewPwd && newPwd !== '') {
             console.log('2')
             alert('New Passwords do not match!')
         }
         else if (newPwd === confirmNewPwd && newPwd !== '') {
-            user.updatePassword(newPwd).then(function () {
-                user.updateProfile({
-                    displayName: name,
-                    email: email,
-                    photoURL: avatar
-                }).then(function () {
-                    alert('Profile Updated')
-                }).catch(function (error) {
-                    alert(error)
+            const db = firebase.firestore();
+            db.collection("Users").doc(user.uid).update({
+                Name: name,
+                Avatar: avatar,
+            })
+                .then(function () {
+                    user.updatePassword(newPwd).then(function () {
+                        user.updateProfile({
+                            displayName: name,
+                            photoURL: avatar
+                        }).then(function () {
+
+                            alert('Profile Updated')
+                            window.location.reload()
+                        }).catch(function (error) {
+                            alert(error)
+                        });
+
+                    }).catch(function (error) {
+                        alert(error)
+                    });
+                })
+                .catch(function (error) {
+                    console.error("Error writing document: ", error);
                 });
-                alert('Profile Updated')
-                window.location.reload()
-            }).catch(function (error) {
-                alert(error)
-            });
+
         }
         else {
-            user.updateProfile({
-                displayName: name,
-                email: email,
-                photoURL: avatar
-            }).then(function () {
-                alert('Profile Updated')
-                window.location.reload()
-            }).catch(function (error) {
-                alert(error)
-            });
+            const db = firebase.firestore();
+            db.collection("Users").doc(user.uid).update({
+                Name: name,
+                Avatar: avatar,
+            })
+                .then(function () {
+                    console.log("Document successfully written!");
+                    alert('Profile Updated')
+                    window.location.reload()
+                })
+                .catch(function (error) {
+                    console.error("Error writing document: ", error);
+                });
         }
     }
 
@@ -182,7 +197,7 @@ const Profile = () => {
                                 value={name}
                                 onChange={handleChange('name')}
                             />
-                            <TextField
+                            {/* <TextField
                                 variant="outlined"
                                 margin="normal"
                                 fullWidth
@@ -197,7 +212,7 @@ const Profile = () => {
                                 }}
                                 value={email}
                                 onChange={handleChange('email')}
-                            />
+                            /> */}
                             <hr></hr>
                             <h5>Change Password</h5>
                             {/* <TextField

@@ -16,6 +16,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useHistory } from 'react-router'
 import firebase from './base'
+import 'firebase/firestore';
+import defav from './img/defav.png';
+
+
 const SignUp = ({ history }) => {
 
   const { push } = useHistory()
@@ -27,12 +31,21 @@ const SignUp = ({ history }) => {
     firebase.auth()
       .createUserWithEmailAndPassword(email.value, password.value)
       .then((res) => {
+        const db = firebase.firestore();
         const user = firebase.auth().currentUser;
-        return user.updateProfile({
-          displayName: name.value
+
+        db.collection("Users").doc(user.uid).set({
+          Name: name.value,
+          Avatar: defav,
+          friends: [],
+          TetrisHighScore: 0
         })
-      })
-      .then((res) => {
+          .then(function () {
+            console.log("Document successfully written!");
+          })
+          .catch(function (error) {
+            console.error("Error writing document: ", error);
+          });
         alert('User added')
         push('/login')
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import firebase from "./base";
 import { Link } from 'react-router-dom';
@@ -23,6 +23,7 @@ import { Icon } from 'react-icons-kit'
 import { thLarge } from 'react-icons-kit/fa/thLarge'
 import GroupIcon from '@material-ui/icons/Group';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import 'firebase/firestore';
 
 const drawerWidth = 240;
 
@@ -87,7 +88,14 @@ export default function ButtonAppBar() {
 
     var user = firebase.auth().currentUser;
     console.log(user)
-    var name = user.displayName;
+    const [name, setName] = useState('')
+    const db = firebase.firestore();
+    db.collection("Users")
+        .doc(user.uid)
+        .get()
+        .then(doc => {
+            setName(doc.data().Name)
+        })
 
 
     //     return (
@@ -186,13 +194,15 @@ export default function ButtonAppBar() {
                     name === "Guest" ?
                         null :
                         <>
-                            <List>
-                                <ListItem button >
-                                    <GroupIcon />
+                            <Link to={`/Friends`}>
+                                <List>
+                                    <ListItem button >
+                                        <GroupIcon />
                             &nbsp;&nbsp;&nbsp;&nbsp;
                             <ListItemText primary='Friends' />
-                                </ListItem>
-                            </List>
+                                    </ListItem>
+                                </List>
+                            </Link>
                             <Link to={`/Profile`}>
 
                                 <List>

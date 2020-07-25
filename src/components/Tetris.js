@@ -85,11 +85,8 @@ const Tetris = () => {
       .doc(user.uid)
       .get()
       .then(doc => {
-        if (doc.data() && doc.data().tetrisScore) {
-          high = doc.data().tetrisScore;
-          setHighScore(high)
-        }
-
+        high = doc.data().TetrisHighScore;
+        setHighScore(high)
         // console.log(data); // LA city object with key-value pair
       })
   }, [],
@@ -146,9 +143,8 @@ const Tetris = () => {
           setCelebrate(1)
         setGameOver(true);
         const db = firebase.firestore();
-        db.collection("Users").doc(user.uid).set({
-          userID: user.uid,
-          tetrisScore: highScore,
+        db.collection("Users").doc(user.uid).update({
+          TetrisHighScore: highScore
         })
           .then(function () {
             console.log("Document successfully written!");
