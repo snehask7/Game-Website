@@ -87,7 +87,6 @@ const useStyles = makeStyles((theme) => ({
 export default function ButtonAppBar() {
 
     var user = firebase.auth().currentUser;
-    console.log(user)
     const [name, setName] = useState('')
     const db = firebase.firestore();
     db.collection("Users")

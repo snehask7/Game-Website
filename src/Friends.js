@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import { MenuItem, MenuWrapper } from './components/styles/StyledMenu';
 import Tetris from './Tetris.png'
@@ -25,10 +25,15 @@ import av14 from './img/av14.png'
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
+
 
 import TextField from '@material-ui/core/TextField';
 
-const Friends = () => {
+const Friends = ({ history }) => {
 
     // const readData = () => {
     //   const db = firebase.firestore();
@@ -44,99 +49,128 @@ const Friends = () => {
     //     });
     // }
 
-    const [state, setState] = useState({
-        email: '',
-        name: '',
-        newPwd: '',
-        confirmNewPwd: '',
-        avatar: defav
-    })
 
-    const { email, name, newPwd, confirmNewPwd, avatar } = state;
-    const [user, setUser] = useState()
-    useEffect(() => {
-        const user = firebase.auth().currentUser;
-        const db = firebase.firestore();
-        db.collection("Users")
-            .doc(user.uid)
-            .get()
-            .then(doc => {
-                setState({ ...state, name: doc.data().Name, avatar: doc.data().Avatar })
-            })
-
-    }, [])
-
-    const handleChange = (name) => (event) => {
-        setState({ ...state, [name]: event.target.value });  //spread operator
-    }
     const useStyles = makeStyles((theme) => ({
         root: {
-            flexGrow: 1,
+            width: '100%',
+            maxWidth: 360,
+            backgroundColor: theme.palette.background.paper,
+            position: 'relative',
+            overflow: 'auto',
+            maxHeight: 700,
         },
-        paper: {
-            padding: theme.spacing(2),
-            textAlign: 'center',
-            color: theme.palette.text.secondary,
+        listSection: {
+            backgroundColor: 'inherit',
+        },
+        ul: {
+            backgroundColor: 'inherit',
+            padding: 0,
         },
     }));
+
     const classes = useStyles();
 
-    const saveProfile = (event) => {
+    const [state, setState] = useState({
+        friends: [],
+        name: ''
+    })
 
-        console.log(newPwd)
-        const user = firebase.auth().currentUser;
-        event.preventDefault()
-        if (name === '') {
-            console.log('1')
-            alert('Name is a manditory fields!')
-        }
-        if (newPwd !== confirmNewPwd && newPwd !== '') {
-            console.log('2')
-            alert('New Passwords do not match!')
-        }
-        else if (newPwd === confirmNewPwd && newPwd !== '') {
-            const db = firebase.firestore();
-            db.collection("Users").doc(user.uid).update({
-                Name: name,
-                Avatar: avatar,
-            })
-                .then(function () {
-                    user.updatePassword(newPwd).then(function () {
-                        user.updateProfile({
-                            displayName: name,
-                            photoURL: avatar
-                        }).then(function () {
+    const { name, friends } = state;
+    const [users, setUser] = useState()
 
-                            alert('Profile Updated')
-                            window.location.reload()
-                        }).catch(function (error) {
-                            alert(error)
-                        });
+    const getUsers = useCallback(
+        async event => {
+            // event.preventDefault();
 
-                    }).catch(function (error) {
-                        alert(error)
-                    });
-                })
-                .catch(function (error) {
-                    console.error("Error writing document: ", error);
+            try {
+                const user = firebase.auth().currentUser;
+                const db = firebase.firestore();
+                const userRef = db.collection('Users');
+                const snapshot = await userRef.get();
+                console.log(snapshot.docs)
+                setUser(snapshot.docs)
+                snapshot.docs.map(doc => {
+                    console.log(doc.id, '=>', doc.data());
+
                 });
 
-        }
-        else {
-            const db = firebase.firestore();
-            db.collection("Users").doc(user.uid).update({
-                Name: name,
-                Avatar: avatar,
-            })
-                .then(function () {
-                    console.log("Document successfully written!");
-                    alert('Profile Updated')
-                    window.location.reload()
-                })
-                .catch(function (error) {
-                    console.error("Error writing document: ", error);
-                });
-        }
+            } catch (error) {
+                alert(error);
+            }
+        },
+        [name]
+    );
+
+
+
+    // const handleChange = (name) => (event) => {
+    //     setState({ ...state, [name]: event.target.value });  //spread operator
+    // }
+
+    // const saveProfile = (event) => {
+
+    //     console.log(newPwd)
+    //     const user = firebase.auth().currentUser;
+    //     event.preventDefault()
+    //     if (name === '') {
+    //         console.log('1')
+    //         alert('Name is a manditory fields!')
+    //     }
+    //     if (newPwd !== confirmNewPwd && newPwd !== '') {
+    //         console.log('2')
+    //         alert('New Passwords do not match!')
+    //     }
+    //     else if (newPwd === confirmNewPwd && newPwd !== '') {
+    //         const db = firebase.firestore();
+    //         db.collection("Users").doc(user.uid).update({
+    //             Name: name,
+    //             Avatar: avatar,
+    //         })
+    //             .then(function () {
+    //                 user.updatePassword(newPwd).then(function () {
+    //                     user.updateProfile({
+    //                         displayName: name,
+    //                         photoURL: avatar
+    //                     }).then(function () {
+
+    //                         alert('Profile Updated')
+    //                         window.location.reload()
+    //                     }).catch(function (error) {
+    //                         alert(error)
+    //                     });
+
+    //                 }).catch(function (error) {
+    //                     alert(error)
+    //                 });
+    //             })
+    //             .catch(function (error) {
+    //                 console.error("Error writing document: ", error);
+    //             });
+
+    //     }
+    //     else {
+    //         const db = firebase.firestore();
+    //         db.collection("Users").doc(user.uid).update({
+    //             Name: name,
+    //             Avatar: avatar,
+    //         })
+    //             .then(function () {
+    //                 console.log("Document successfully written!");
+    //                 alert('Profile Updated')
+    //                 window.location.reload()
+    //             })
+    //             .catch(function (error) {
+    //                 console.error("Error writing document: ", error);
+    //             });
+    //     }
+    // }
+
+
+    const handleChange = (name) => (event) => {
+        if (name === '')
+            getUsers()
+        setState({ ...state, [name]: event.target.value });  //spread operator
+
     }
 
     return (
@@ -149,7 +183,54 @@ const Friends = () => {
                     <h1 style={{ marginLeft: '2em' }}>Friends</h1>
                     <br></br>
                     <hr></hr>
-                    <h1>hi</h1>
+                    <br></br>
+                    <Grid container >
+                        <Grid item xs={8}>
+                            <br></br>
+                            <br></br>
+                            <br></br>
+                            <br></br>
+                            <List className={classes.root} subheader={<li />}>
+                                <ListSubheader><h3>Your Friends</h3></ListSubheader>
+                                {
+                                    // friends.map((friend, i) => (
+                                    //     return(
+                                    //         <ListItemText primary={`Item ${item}`} />
+                                    //     )
+                                    // ))
+                                }
+
+                            </List>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <TextField
+                                variant="outlined"
+                                margin="normal"
+                                required
+                                fullWidth
+                                id="name"
+                                label="Name"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                value={name}
+                                onChange={handleChange('name')}
+                            />
+                            <br></br>
+                            <List className={classes.root} subheader={<li />}>
+                                <ListSubheader><h3>Find Friends</h3></ListSubheader>
+                                {/* {
+                                    users.map((friend) => (
+                                        return(
+                                            <ListItemText primary={friend.Name} />
+                                        )
+                                    ))
+                                } */}
+
+                            </List>
+                        </Grid>
+
+                    </Grid>
                 </div >
             </div>
         </>
