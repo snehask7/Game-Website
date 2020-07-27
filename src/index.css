@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600,700,800');
-
+@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 * {
   box-sizing: border-box;
 }
@@ -96,4 +97,13 @@ body, html, .App, #root, .auth-wrapper {
     0 0 150px #0ff;
 }
 
+.friendsFont{
+  font-family: 'Permanent Marker', cursive;
+  font-size:4em;
+}
 
+.montserrat{
+  font-family: 'Bebas Neue', cursive;
+  font-size:30px;
+
+}

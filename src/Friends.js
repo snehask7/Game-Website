@@ -32,6 +32,10 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import ClearIcon from '@material-ui/icons/Clear';
 import TextField from '@material-ui/core/TextField';
+import Divider from '@material-ui/core/Divider';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import SearchIcon from '@material-ui/icons/Search';
 
 const Friends = ({ history }) => {
 
@@ -140,7 +144,7 @@ const Friends = ({ history }) => {
             friends: allFriends
         })
             .then((response) => {
-                alert('Friend Request Send!')
+                alert('Friend Added!')
                 window.location.reload()
             })
     }
@@ -148,15 +152,16 @@ const Friends = ({ history }) => {
     const removeFriend = (userID) => {
         console.log('add')
         var allFriends = friends;
-        allFriends=allFriends.splice(allFriends.indexOf(userID),allFriends.indexOf(userID)+1);
-        setState({ ...state, friends: allFriends })
         console.log(allFriends)
+        console.log(allFriends.indexOf(userID))
+        allFriends.splice(allFriends.indexOf(userID), 1);
+        setState({ ...state, friends: allFriends })
         const db = firebase.firestore();
         db.collection("Users").doc(currentUser.uid).update({
             friends: allFriends
         })
             .then((response) => {
-                alert('Friend Request Send!')
+                alert('Friend removed!')
                 window.location.reload()
             })
     }
@@ -183,86 +188,82 @@ const Friends = ({ history }) => {
                 <Nav />
 
                 <div style={{ display: 'block', marginLeft: '28%', marginRight: '20%', marginTop: '6%' }}>
-                    <h1 style={{ marginLeft: '2em' }}>Friends</h1>
-                    <br></br>
-                    <hr></hr>
-                    <br></br>
-                    <button onClick={() => clearFriend()}>Clear</button>
-                    <Grid container >
-                        <Grid item xs={8}>
-                            <br></br>
-                            <br></br>
-                            <br></br>
-                            <br></br>
-                            <List className={classes.root} subheader={<li />}>
-                                <ListSubheader><h3>Your Friends</h3></ListSubheader>
-                                {
-                                    console.log(friends,users)
-                                }
-                                {
+                    <h1 className="friendsFont" >Friends</h1>
 
-                                    users.map((user) => {
-                                        if (friends.includes(user.uid))
-                                            return (
-                                                // <ListItemText primary={user.Name} />
-                                                <ListItem>
-                                                    <img width="50" src={user.Avatar}></img>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <h4>{user.Name}</h4>
-                                                    <Button onClick={() => removeFriend(user.uid)}><ClearIcon style={{ color: "red" }} /></Button>
-                                                </ListItem>
-                                            )
-                                    })
-                                }
-
-                            </List>
-                        </Grid>
-                        <Grid item xs={4}>
+                    <hr ></hr>
+                    <br></br>
+                    {/* <button onClick={() => clearFriend()}>Clear</button> */}
+                    <Grid container spacing={3} >
+                        <Grid container spacing={3}>
+                            <h3 className="montserrat" style={{ marginTop: '3%', marginLeft: '2%',marginRight: '2%' }}>Find Friends&nbsp;<SearchIcon /></h3>
                             <TextField
                                 variant="outlined"
                                 margin="normal"
                                 required
-                                fullWidth
                                 id="name"
-                                label="Name"
+                                placeholder="Search"
                                 autoComplete='off'
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
+                                size="small"
                                 value={name}
                                 onChange={handleChange('name')}
+                                style={{marginTop: '3%'}}
                             />
-                            <br></br>
-                            <List className={classes.root} subheader={<li />}>
-                                <ListSubheader><h3>Find Friends</h3></ListSubheader>
-
-                                {
-
-                                    searchList.map((user) => {
-                                        if (user.Name !== 'Guest' && user.uid !== currentUser.uid && !friends.includes(user.uid))
-                                            return (
-                                                // <ListItemText primary={user.Name} />
-                                                <ListItem>
-                                                    <img width="50" src={user.Avatar}></img>
-                                                    &nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <h4>{user.Name}</h4>
-                                                    <Button onClick={() => addFriend(user.uid)}><PersonAddIcon style={{ color: "blue" }} /></Button>
-                                                </ListItem>
-                                            )
-                                    })
-                                }
-                                {/* {
-                                    users.map((friend) => (
-                                        return(
-                                            <ListItemText primary={friend.Name} />
-                                        )
-                                    ))
-                                } */}
-
-                            </List>
                         </Grid>
+                        <br></br><br></br><br></br>
+                        <br></br>
+                        <Grid container spacing={3}>
+                            {
 
+                                searchList.map((user) => {
+                                    if (user.Name !== 'Guest' && user.uid !== currentUser.uid && !friends.includes(user.uid))
+                                        return (
+                                            <Grid item xs={6} sm={4}>
+
+                                                <Card style={{ width: '20em' }}>
+                                                    <ListItem>
+                                                        <img style={{ marginRight: '1em', marginLeft: '1em' }} width="50" src={user.Avatar}></img>
+                                                        <h4>{user.Name}</h4>
+                                                        <Button onClick={() => addFriend(user.uid)}><PersonAddIcon style={{ color: "blue" }} /></Button>
+                                                    </ListItem>
+                                                </Card>
+                                            </Grid>
+
+                                        )
+                                })
+                            }
+                        </Grid>
                     </Grid>
+                    <br></br>
+                    <hr></hr>
+                    <Grid container spacing={3} >
+
+                        <Grid container spacing={3}>
+
+                            <h3 className="montserrat" style={{ marginTop: '3%', marginLeft: '2%' }}>Your Friends</h3>
+                        </Grid>
+                        <br></br><br></br><br></br>
+                        <Grid container spacing={3}>
+
+                            {
+
+                                users.map((user) => {
+                                    if (friends.includes(user.uid))
+                                        return (
+                                            <Grid item xs={6} sm={4}>
+                                                <Card style={{ width: '20em' }}>
+                                                    <ListItem>
+                                                        <img style={{ marginRight: '1em', marginLeft: '1em' }} width="50" src={user.Avatar}></img>
+                                                        <h4>{user.Name}</h4>
+                                                        <Button onClick={() => removeFriend(user.uid)}><ClearIcon style={{ color: "red" }} /></Button>
+                                                    </ListItem>
+                                                </Card>
+                                            </Grid>
+                                        )
+                                })
+                            }
+                        </Grid>
+                    </Grid>
+
                 </div >
             </div>
         </>
