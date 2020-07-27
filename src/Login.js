@@ -29,8 +29,8 @@ const Login = ({ history }) => {
 
 
   const guestLogin = () => {
-    const email = 'guest@gmail.com';
-    const password = 'guest123';
+    const email = 'guest@guest.com';
+    const password = 'Guest123';
     try {
       app
         .auth()

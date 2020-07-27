@@ -38,7 +38,8 @@ const SignUp = ({ history }) => {
           Name: name.value,
           Avatar: defav,
           friends: [],
-          TetrisHighScore: 0
+          TetrisHighScore: 0,
+          uid: user.uid
         })
           .then(function () {
             console.log("Document successfully written!");

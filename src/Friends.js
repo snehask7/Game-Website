@@ -29,26 +29,13 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
-
-
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import ClearIcon from '@material-ui/icons/Clear';
 import TextField from '@material-ui/core/TextField';
 
 const Friends = ({ history }) => {
 
-    // const readData = () => {
-    //   const db = firebase.firestore();
-    //   db.collection("Users").doc("new").set({
-    //     userID: "123",
-    //     tetrisScore: "123",
-    //   })
-    //     .then(function () {
-    //       console.log("Document successfully written!");
-    //     })
-    //     .catch(function (error) {
-    //       console.error("Error writing document: ", error);
-    //     });
-    // }
-
+    const currentUser = firebase.auth().currentUser;
 
     const useStyles = makeStyles((theme) => ({
         root: {
@@ -76,23 +63,32 @@ const Friends = ({ history }) => {
     })
 
     const { name, friends } = state;
-    const [users, setUser] = useState()
+
+    //list of all users in the find friends list
+    const [users, setUser] = useState([])
+
+    //list of users that match the search name
+    const [searchList, setSearchList] = useState([])
+
 
     const getUsers = useCallback(
         async event => {
             // event.preventDefault();
 
             try {
+                console.log('here')
+
                 const user = firebase.auth().currentUser;
                 const db = firebase.firestore();
                 const userRef = db.collection('Users');
                 const snapshot = await userRef.get();
                 console.log(snapshot.docs)
-                setUser(snapshot.docs)
+                var userList = []
                 snapshot.docs.map(doc => {
-                    console.log(doc.id, '=>', doc.data());
-
+                    userList.push(doc.data())
+                    // if(doc.data)
                 });
+                setUser(userList)
 
             } catch (error) {
                 alert(error);
@@ -101,78 +97,85 @@ const Friends = ({ history }) => {
         [name]
     );
 
+    useEffect(() => {
+        const user = firebase.auth().currentUser;
+        const db = firebase.firestore();
+        db.collection("Users")
+            .doc(user.uid)
+            .get()
+            .then(doc => {
+                setState({ ...state, friends: doc.data().friends })
+                getUsers()
+            })
 
+    }, [])
 
-    // const handleChange = (name) => (event) => {
-    //     setState({ ...state, [name]: event.target.value });  //spread operator
-    // }
-
-    // const saveProfile = (event) => {
-
-    //     console.log(newPwd)
-    //     const user = firebase.auth().currentUser;
-    //     event.preventDefault()
-    //     if (name === '') {
-    //         console.log('1')
-    //         alert('Name is a manditory fields!')
-    //     }
-    //     if (newPwd !== confirmNewPwd && newPwd !== '') {
-    //         console.log('2')
-    //         alert('New Passwords do not match!')
-    //     }
-    //     else if (newPwd === confirmNewPwd && newPwd !== '') {
-    //         const db = firebase.firestore();
-    //         db.collection("Users").doc(user.uid).update({
-    //             Name: name,
-    //             Avatar: avatar,
-    //         })
-    //             .then(function () {
-    //                 user.updatePassword(newPwd).then(function () {
-    //                     user.updateProfile({
-    //                         displayName: name,
-    //                         photoURL: avatar
-    //                     }).then(function () {
-
-    //                         alert('Profile Updated')
-    //                         window.location.reload()
-    //                     }).catch(function (error) {
-    //                         alert(error)
-    //                     });
-
-    //                 }).catch(function (error) {
-    //                     alert(error)
-    //                 });
-    //             })
-    //             .catch(function (error) {
-    //                 console.error("Error writing document: ", error);
-    //             });
-
-    //     }
-    //     else {
-    //         const db = firebase.firestore();
-    //         db.collection("Users").doc(user.uid).update({
-    //             Name: name,
-    //             Avatar: avatar,
-    //         })
-    //             .then(function () {
-    //                 console.log("Document successfully written!");
-    //                 alert('Profile Updated')
-    //                 window.location.reload()
-    //             })
-    //             .catch(function (error) {
-    //                 console.error("Error writing document: ", error);
-    //             });
-    //     }
-    // }
-
-
-    const handleChange = (name) => (event) => {
+    const handleChange = (label) => (event) => {
         if (name === '')
             getUsers()
-        setState({ ...state, [name]: event.target.value });  //spread operator
+        setState({ ...state, [label]: event.target.value });  //spread operator
+        findFriends(event.target.value)
 
     }
+    const findFriends = (searchName) => {
+        // console.log(searchName)
+        var searchResults = []
+        for (var i = 0; i < users.length; i++) {
+            console.log(users[i])
+            if (users[i].Name.toLowerCase().includes(searchName.toLowerCase())) {
+                searchResults.push(users[i])
+            }
+        }
+        setSearchList(searchResults)
+    }
 
+    const addFriend = (userID) => {
+        console.log('add')
+        var allFriends = friends;
+        allFriends.push(userID);
+        setState({ ...state, friends: allFriends })
+        console.log(allFriends)
+        const db = firebase.firestore();
+        db.collection("Users").doc(currentUser.uid).update({
+            friends: allFriends
+        })
+            .then((response) => {
+                alert('Friend Request Send!')
+                window.location.reload()
+            })
+    }
+
+    const removeFriend = (userID) => {
+        console.log('add')
+        var allFriends = friends;
+        allFriends=allFriends.splice(allFriends.indexOf(userID),allFriends.indexOf(userID)+1);
+        setState({ ...state, friends: allFriends })
+        console.log(allFriends)
+        const db = firebase.firestore();
+        db.collection("Users").doc(currentUser.uid).update({
+            friends: allFriends
+        })
+            .then((response) => {
+                alert('Friend Request Send!')
+                window.location.reload()
+            })
+    }
+
+    const clearFriend = (userID) => {
+
+        const db = firebase.firestore();
+        db.collection("Users").doc(currentUser.uid).set({
+            Name: 'Sneha',
+            Avatar: defav,
+            friends: [],
+            TetrisHighScore: 0,
+            uid: currentUser.uid
+        })
+            .then((response) => {
+                alert('Friend Request Send!')
+                window.location.reload()
+            })
+    }
     return (
         <>
 
@@ -184,6 +187,7 @@ const Friends = ({ history }) => {
                     <br></br>
                     <hr></hr>
                     <br></br>
+                    <button onClick={() => clearFriend()}>Clear</button>
                     <Grid container >
                         <Grid item xs={8}>
                             <br></br>
@@ -193,11 +197,22 @@ const Friends = ({ history }) => {
                             <List className={classes.root} subheader={<li />}>
                                 <ListSubheader><h3>Your Friends</h3></ListSubheader>
                                 {
-                                    // friends.map((friend, i) => (
-                                    //     return(
-                                    //         <ListItemText primary={`Item ${item}`} />
-                                    //     )
-                                    // ))
+                                    console.log(friends,users)
+                                }
+                                {
+
+                                    users.map((user) => {
+                                        if (friends.includes(user.uid))
+                                            return (
+                                                // <ListItemText primary={user.Name} />
+                                                <ListItem>
+                                                    <img width="50" src={user.Avatar}></img>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <h4>{user.Name}</h4>
+                                                    <Button onClick={() => removeFriend(user.uid)}><ClearIcon style={{ color: "red" }} /></Button>
+                                                </ListItem>
+                                            )
+                                    })
                                 }
 
                             </List>
@@ -210,6 +225,7 @@ const Friends = ({ history }) => {
                                 fullWidth
                                 id="name"
                                 label="Name"
+                                autoComplete='off'
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
@@ -219,6 +235,22 @@ const Friends = ({ history }) => {
                             <br></br>
                             <List className={classes.root} subheader={<li />}>
                                 <ListSubheader><h3>Find Friends</h3></ListSubheader>
+
+                                {
+
+                                    searchList.map((user) => {
+                                        if (user.Name !== 'Guest' && user.uid !== currentUser.uid && !friends.includes(user.uid))
+                                            return (
+                                                // <ListItemText primary={user.Name} />
+                                                <ListItem>
+                                                    <img width="50" src={user.Avatar}></img>
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <h4>{user.Name}</h4>
+                                                    <Button onClick={() => addFriend(user.uid)}><PersonAddIcon style={{ color: "blue" }} /></Button>
+                                                </ListItem>
+                                            )
+                                    })
+                                }
                                 {/* {
                                     users.map((friend) => (
                                         return(
