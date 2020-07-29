@@ -8,7 +8,6 @@ import Nav from './Nav'
 import firebase from "./base"
 import 'firebase/firestore';
 import defav from './img/defav.png';
-import av1 from './img/av1.png'
 import av2 from './img/av2.png'
 import av3 from './img/av3.png'
 import av4 from './img/av4.png'
@@ -195,7 +194,7 @@ const Friends = ({ history }) => {
                     {/* <button onClick={() => clearFriend()}>Clear</button> */}
                     <Grid container spacing={3} >
                         <Grid container spacing={3}>
-                            <h3 className="montserrat" style={{ marginTop: '3%', marginLeft: '2%',marginRight: '2%' }}>Find Friends&nbsp;<SearchIcon /></h3>
+                            <h3 className="montserrat" style={{ marginTop: '3%', marginLeft: '2%', marginRight: '2%' }}>Find Friends&nbsp;<SearchIcon /></h3>
                             <TextField
                                 variant="outlined"
                                 margin="normal"
@@ -206,7 +205,7 @@ const Friends = ({ history }) => {
                                 size="small"
                                 value={name}
                                 onChange={handleChange('name')}
-                                style={{marginTop: '3%'}}
+                                style={{ marginTop: '3%' }}
                             />
                         </Grid>
                         <br></br><br></br><br></br>
@@ -243,24 +242,26 @@ const Friends = ({ history }) => {
                         </Grid>
                         <br></br><br></br><br></br>
                         <Grid container spacing={3}>
+                            <List style={{overflow: 'auto'}} >
 
-                            {
+                                {
 
-                                users.map((user) => {
-                                    if (friends.includes(user.uid))
-                                        return (
-                                            <Grid item xs={6} sm={4}>
-                                                <Card style={{ width: '20em' }}>
-                                                    <ListItem>
-                                                        <img style={{ marginRight: '1em', marginLeft: '1em' }} width="50" src={user.Avatar}></img>
-                                                        <h4>{user.Name}</h4>
-                                                        <Button onClick={() => removeFriend(user.uid)}><ClearIcon style={{ color: "red" }} /></Button>
-                                                    </ListItem>
-                                                </Card>
-                                            </Grid>
-                                        )
-                                })
-                            }
+                                    users.map((user) => {
+                                        if (friends.includes(user.uid))
+                                            return (
+                                                <Grid item xs={6} sm={4}>
+                                                    <Card style={{ width: '20em' }}>
+                                                        <ListItem>
+                                                            <img style={{ marginRight: '1em', marginLeft: '1em' }} width="50" src={user.Avatar}></img>
+                                                            <h4>{user.Name}</h4>
+                                                            <Button onClick={() => removeFriend(user.uid)}><ClearIcon style={{ color: "red" }} /></Button>
+                                                        </ListItem>
+                                                    </Card>
+                                                </Grid>
+                                            )
+                                    })
+                                }
+                            </List>
                         </Grid>
                     </Grid>
 

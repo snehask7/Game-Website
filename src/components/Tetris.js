@@ -197,7 +197,7 @@ const Tetris = () => {
   const { width, height } = useWindowSize()
 
   return (
-    <>
+    <div className="disableScrolling" >
       <Nav />
       <br></br>
       <br>
@@ -279,7 +279,7 @@ const Tetris = () => {
           </StyledTetrisWrapper>
         </Grid>
       </Grid>
-    </>
+    </div>
   );
 };
 

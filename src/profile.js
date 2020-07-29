@@ -8,7 +8,6 @@ import Nav from './Nav'
 import firebase from "./base"
 import 'firebase/firestore';
 import defav from './img/defav.png';
-import av1 from './img/av1.png'
 import av2 from './img/av2.png'
 import av3 from './img/av3.png'
 import av4 from './img/av4.png'

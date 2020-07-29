@@ -9,6 +9,20 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import 'firebase/firestore';
 import firebase from "../base"
+import defav from '../img/defav.png';
+import av4 from '../img/av4.png'
+import av5 from '../img/av5.png'
+import av6 from '../img/av6.png'
+import av7 from '../img/av7.png'
+import av8 from '../img/av8.png'
+import av3 from '../img/av3.png'
+import av2 from '../img/av2.png'
+import av9 from '../img/av9.png'
+import av10 from '../img/av10.png'
+import av11 from '../img/av11.png'
+import av12 from '../img/av12.png'
+import av13 from '../img/av13.png'
+import av14 from '../img/av14.png'
 
 
 const Leaderboard = ({ game, score }) => {
@@ -190,7 +204,7 @@ const Leaderboard = ({ game, score }) => {
                                 <StyledTableCell   >
                                     {row.pos}
                                 </StyledTableCell>
-                                <StyledTableCell >{row.Name}</StyledTableCell>
+                                <StyledTableCell ><img width="50" src={row.Avatar}></img>&nbsp;&nbsp;{row.Name}</StyledTableCell>
                                 <StyledTableCell >{row.TetrisHighScore}</StyledTableCell>
 
                             </StyledTableRow>
