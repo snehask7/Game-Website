@@ -202,10 +202,10 @@ const Leaderboard = ({ game, score }) => {
                                 backgroundColor: (currentUser === row.uid ? '#86c5da' : null)
                             }}>
                                 <StyledTableCell   >
-                                    {row.pos}
+                                    <h4>{row.pos}</h4>
                                 </StyledTableCell>
-                                <StyledTableCell ><img width="50" src={row.Avatar}></img>&nbsp;&nbsp;{row.Name}</StyledTableCell>
-                                <StyledTableCell >{row.TetrisHighScore}</StyledTableCell>
+                                <StyledTableCell ><img width="50" src={row.Avatar}></img>&nbsp;&nbsp;<b>{row.Name}</b></StyledTableCell>
+                                <StyledTableCell ><h6>{row.TetrisHighScore}</h6></StyledTableCell>
 
                             </StyledTableRow>
 

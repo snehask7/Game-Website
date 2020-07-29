@@ -249,9 +249,9 @@ const Tetris = () => {
 
                 ) : (
                     <div>
-                      <Display text={`Score: ${score}`} />
-                      <Display text={`rows: ${rows}`} />
-                      <Display text={`Level: ${level}`} />
+                      <HighScoreDisplay text={`Score: ${score}`} />
+                      <HighScoreDisplay text={`Rows: ${rows}`} />
+                      <HighScoreDisplay text={`Level: ${level}`} />
                     </div>
                   )}
                 {
