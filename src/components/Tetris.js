@@ -25,6 +25,11 @@ import 'firebase/firestore';
 
 import StartButton from './StartButton';
 
+import Leaderboard from './Leaderboard';
+
+import Grid from '@material-ui/core/Grid';
+
+
 const Tetris = () => {
 
   const [dropTime, setDropTime] = useState(null);
@@ -87,7 +92,7 @@ const Tetris = () => {
       .then(doc => {
         high = doc.data().TetrisHighScore;
         setHighScore(high)
-        // console.log(data); // LA city object with key-value pair
+        console.log(doc)
       })
   }, [],
   );
@@ -207,65 +212,73 @@ const Tetris = () => {
           :
           null
       }
+      <Grid container >
+        <Grid style={{marginRight: '-35em',marginLeft: '10em',marginTop: '10em',width: '30em'}} >
 
-      <StyledTetrisWrapper
-        role="button"
-        tabIndex="0"
-        onKeyDown={e => move(e)}
-        onKeyUp={keyUp}
-      >
-        <br></br>
-        {
-          user.email !== 'guest@gmail.com' ?
+          <Leaderboard score={score} game="Tetris"/>
+        </Grid>
+        <Grid item xs={15} sm={6}>
 
-            <div style={{ marginBottom: '-4em', width: '10em`' }}>
-              <HighScoreDisplay text={`${HighScoreText} ${highScore}`} />
-            </div>
-            :
-            <>
-            </>
+          <StyledTetrisWrapper
+            role="button"
+            tabIndex="0"
+            onKeyDown={e => move(e)}
+            onKeyUp={keyUp}
+          >
+            <br></br>
+            {/* {
+              user.email !== 'guest@gmail.com' ?
 
-        }
-
-        <StyledTetris>
-
-          <Stage stage={stage} />
-          <aside>
-            {gameOver ? (
-              <div>
-                <Display text={`Score: ${score}`} />
-              </div>
-
-            ) : (
-                <div>
-                  <Display text={`Score: ${score}`} />
-                  <Display text={`rows: ${rows}`} />
-                  <Display text={`Level: ${level}`} />
+                <div style={{ marginBottom: '-4em', width: '10em`' }}>
+                  <HighScoreDisplay text={`${HighScoreText} ${highScore}`} />
                 </div>
-              )}
-            {
-              gameOver === true ?
-                <Modal
-                  className="test-class" //this will completely overwrite the default css completely
-                  // style={{ background: 'red' }} //overwrites the default background
-                  containerStyle={{ background: 'white', width: '18em', height: '7em', marginLeft: '-25em', borderRadius: '5em' }} //changes styling on the inner content are
-                  containerClassName="test"
-                  closeOnOuterClick={true}
-                  show={true}
-                // onClose={this.close.bind(this)}
-                >
-                  <img style={{ marginTop: '1em', borderRadius: '5em' }} src={GameOver}></img>
-                </Modal>
                 :
-                null
-            }
+                <>
+                </>
 
-            <StartButton text={gameStarted === 0 ? 'Start Game' : 'Restart Game'} callback={startGame} />
-            <StartButton text={paused === 0 ? 'Pause' : 'Continue'} callback={pauseGame} />
+            } */}
 
-          </aside>
-        </StyledTetris>
-      </StyledTetrisWrapper>
+            <StyledTetris>
+
+              <Stage stage={stage} />
+              <aside>
+                {gameOver ? (
+                  <div>
+                    <Display text={`Score: ${score}`} />
+                  </div>
+
+                ) : (
+                    <div>
+                      <Display text={`Score: ${score}`} />
+                      <Display text={`rows: ${rows}`} />
+                      <Display text={`Level: ${level}`} />
+                    </div>
+                  )}
+                {
+                  gameOver === true ?
+                    <Modal
+                      className="test-class" //this will completely overwrite the default css completely
+                      // style={{ background: 'red' }} //overwrites the default background
+                      containerStyle={{ background: 'white', width: '18em', height: '7em', marginLeft: '-25em', borderRadius: '5em' }} //changes styling on the inner content are
+                      containerClassName="test"
+                      closeOnOuterClick={true}
+                      show={true}
+                    // onClose={this.close.bind(this)}
+                    >
+                      <img style={{ marginTop: '1em', borderRadius: '5em' }} src={GameOver}></img>
+                    </Modal>
+                    :
+                    null
+                }
+
+                <StartButton text={gameStarted === 0 ? 'Start Game' : 'Restart Game'} callback={startGame} />
+                <StartButton text={paused === 0 ? 'Pause' : 'Continue'} callback={pauseGame} />
+
+              </aside>
+            </StyledTetris>
+          </StyledTetrisWrapper>
+        </Grid>
+      </Grid>
     </>
   );
 };

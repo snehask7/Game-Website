@@ -1,12 +1,15 @@
 @import url('https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600,700,800');
 @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 * {
   box-sizing: border-box;
 }
 body {
-  background-color: #7ee8fa;
-background-image: linear-gradient(315deg, #7ee8fa 0%, #80ff72 74%);
+  /* background-color: #7ee8fa;
+background-image: linear-gradient(315deg, #7ee8fa 0%, #80ff72 74%); */
+background-color: #ef5734;
+background-image: linear-gradient(315deg, #ef5734 0%, #ffcc2f 74%);
 
   display: flex;
   font-weight: 400;
@@ -105,5 +108,11 @@ body, html, .App, #root, .auth-wrapper {
 .montserrat{
   font-family: 'Bebas Neue', cursive;
   font-size:30px;
+
+}
+
+.leaderboard{
+  font-family: 'Press Start 2P', cursive;
+  font-size:20px;
 
 }
