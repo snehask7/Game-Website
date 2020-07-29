@@ -4,4 +4,3 @@ This website was developed using React JS and Firebase. You can play the tetris 
 
 ![profile preview not available](https://github.com/snehask7/Game-Website/blob/master/ProfilePreview.png?raw=true)
 
-![Friends preview not available](https://github.com/snehask7/Game-Website/blob/master/FriendsPreview.png?raw=true)
