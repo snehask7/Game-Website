@@ -185,7 +185,7 @@ const Leaderboard = ({ game, score }) => {
                         }
                         {users.map((row, index) => (
                             <StyledTableRow style={{
-                                backgroundColor: (currentUser === row.uid ? '#5ee527' : null)
+                                backgroundColor: (currentUser === row.uid ? '#86c5da' : null)
                             }}>
                                 <StyledTableCell   >
                                     {row.pos}
