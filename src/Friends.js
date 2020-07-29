@@ -242,7 +242,6 @@ const Friends = ({ history }) => {
                         </Grid>
                         <br></br><br></br><br></br>
                         <Grid container spacing={3}>
-                            <List style={{overflow: 'auto'}} >
 
                                 {
 
@@ -261,7 +260,6 @@ const Friends = ({ history }) => {
                                             )
                                     })
                                 }
-                            </List>
                         </Grid>
                     </Grid>
 
