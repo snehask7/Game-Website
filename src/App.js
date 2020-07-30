@@ -10,6 +10,7 @@ import Tetris from './components/Tetris';
 import Profile from './profile'
 import Friends from './Friends'
 
+
 const App = () => {
   return (
     <AuthProvider>
@@ -19,10 +20,8 @@ const App = () => {
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={SignUp} />
           <Route path="/Tetris" exact component={Tetris} />
-          <Route path="/profile" exact component={Profile}/>
-          <Route path="/Friends" exact component={Friends}/>
-
-
+          <Route path="/profile" exact component={Profile} />
+          <Route path="/Friends" exact component={Friends} />
         </div>
       </Router>
     </AuthProvider>

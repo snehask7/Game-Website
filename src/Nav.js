@@ -24,7 +24,7 @@ import { thLarge } from 'react-icons-kit/fa/thLarge'
 import GroupIcon from '@material-ui/icons/Group';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import 'firebase/firestore';
-
+import { GiTicTacToe } from "react-icons/gi";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -177,16 +177,27 @@ export default function ButtonAppBar() {
                     </IconButton>
                 </div>
                 <Divider />
-                <Link to={`/Tetris`}>
-                    <List>
+                <List>
+                    <Link to={`/Tetris`}>
                         <ListItem button >
-
                             <Icon style={{ color: '#f5e942', marginRight: '1em', }} size={25} icon={thLarge} />
                             <ListItemText primary='Tetris' />
                         </ListItem>
+                    </Link>
 
-                    </List>
-                </Link>
+                    {/* {
+                        name === "Guest" ?
+                            null :
+                            <Link to={`/TicTacToeMenu`}>
+                                <ListItem button >
+                                    <GiTicTacToe style={{ marginRight: '1em', }} size={30} />
+                                    <ListItemText primary='TicTacToe' />
+                                </ListItem>
+                            </Link>
+
+                    } */}
+
+                </List>
                 <Divider />
 
                 {
